@@ -77,18 +77,3 @@ if st.button("Search"):
         st.write(filtered_df[["name","room_type", "price","picture_url", "review_scores_rating", "bedrooms", "bathrooms", "listing_url"]])
     else:
         st.warning("No properties found matching your criteria.")
-
-# Scatter plot Harga vs. Rating dengan warna berdasarkan cluster
-st.subheader("📊 Price vs. Review Scores Rating (Clustered)")
-fig, ax = plt.subplots(figsize=(8,6))
-sns.scatterplot(x=df["price"], y=df["review_scores_rating"], hue=df["cluster_name"], palette="coolwarm", ax=ax)
-ax.set_xlabel("Price")
-ax.set_ylabel("Review Scores Rating")
-st.pyplot(fig)
-
-# Pie Chart distribusi tipe kamar dalam cluster yang dipilih
-if not filtered_df.empty:
-    st.subheader("🏠 Room Type Distribution in Selected Cluster")
-    fig, ax = plt.subplots()
-    filtered_df["room_type"].value_counts().plot.pie(autopct="%1.1f%%", startangle=140, cmap="coolwarm", ax=ax)
-    st.pyplot(fig)
