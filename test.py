@@ -12,7 +12,7 @@ st.subheader("Find your perfect Airbnb property based on your preferences!")
 
 col1, col2, col3 = st.columns([1, 2, 1])  # Membuat 3 kolom, kolom tengah lebih besar
 with col2:  # Menempatkan gambar di kolom tengah
-    st.image("Logo Kelompok Foursight .jpg", caption="Created by : Foursight", width=400)
+    st.image("Logo Kelompok Foursight .jpg", caption="Created by : Foursight", width=150)
 
 # Checkbox untuk menampilkan data mentah
 if st.checkbox("Show raw data"):
