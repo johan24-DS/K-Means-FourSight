@@ -20,11 +20,11 @@ if st.checkbox("Show raw data"):
 
 # Mapping angka cluster ke nama unik (pastikan sesuai dengan data, cek df["cluster"].unique() jika perlu)
 cluster_names = {
-    0: "🏠 Budget Single",
-    1: "🏡 Spacious Family Home",
-    2: "🌟 Luxury Group Stay",
-    3: "💼 Economy Shared Room",
-    4: "🛏️ Mid-Range Private Room"
+    1: "🏠 Budget Single",
+    2: "🏡 Spacious Family Home",
+    3: "🌟 Luxury Group Stay",
+    4: "💼 Economy Shared Room",
+    5: "🛏️ Mid-Range Private Room"
 }
 
 # Ganti angka cluster dengan nama
