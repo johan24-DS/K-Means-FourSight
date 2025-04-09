@@ -60,7 +60,7 @@ st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property b
 # 🖼️ Logo di tengah
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("Logo Kelompok Foursight.jpg", width=400)
+    st.image("logo_foursight.jpg", width=300)
     st.markdown("<p style='text-align: center; color: grey; font-size: 12px;'>Created by : Foursight</p>", unsafe_allow_html=True)
 
 
