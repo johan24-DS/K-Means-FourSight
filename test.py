@@ -90,13 +90,15 @@ filtered_df = df[
 sort_col1, sort_col2 = st.columns(2)
 
 with sort_col1:
-    sort_price = st.selectbox("Sort by Price", ["⬆️ Highest", "⬇️ Lowest"])
+    sort_price = st.selectbox("Sort by Price", ["No Sort", "⬆️ Highest", "⬇️ Lowest"])
 
 with sort_col2:
-    sort_rating = st.selectbox("Sort by Review Score", ["⬆️ Highest", "⬇️ Lowest"])
+    sort_rating = st.selectbox("Sort by Review Score", ["No Sort", "⬆️ Highest", "⬇️ Lowest"])
+
 
 # Terapkan sorting
 sort_by = []
+
 if sort_price == "⬆️ Highest":
     sort_by.append(("price", False))
 elif sort_price == "⬇️ Lowest":
@@ -107,11 +109,14 @@ if sort_rating == "⬆️ Highest":
 elif sort_rating == "⬇️ Lowest":
     sort_by.append(("review_scores_rating", True))
 
-# Ekstrak kolom dan arah sort, lalu terapkan
-sort_cols = [x[0] for x in sort_by]
-sort_asc = [x[1] for x in sort_by]
+# Jika ada kolom yang dipilih untuk sort
+if sort_by:
+    sort_cols = [x[0] for x in sort_by]
+    sort_asc = [x[1] for x in sort_by]
+    filtered_df = filtered_df.sort_values(by=sort_cols, ascending=sort_asc)
 
-filtered_df = filtered_df.sort_values(by=sort_cols, ascending=sort_asc).head(10)
+# Hanya tampilkan 10 data teratas
+filtered_df = filtered_df.head(10)
 
 
 # Tampilkan listing properti dalam grid
