@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load data hasil clustering
-df = pd.read_excel("hasil clustering kmeans.xlsx")
+df = pd.read_excel("Hasil Clustering KMeans.xlsx")
 
 # Streamlit UI
 st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
