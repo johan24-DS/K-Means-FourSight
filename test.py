@@ -57,12 +57,9 @@ st.markdown("""
 st.markdown("<h1 style='text-align: center;'>🏡 Airbnb Recommendation System</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property based on your preferences!</h4>", unsafe_allow_html=True)
 
-st.markdown("""
-<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; margin-top: -20px;">
-    <img src="https://raw.githubusercontent.com/your-username/your-repo/main/logo.png" alt="Logo" width="200"/>
-    <p style="margin-top: 8px; font-size: 14px; color: gray;">Created by : Foursight</p>
-</div>
-""", unsafe_allow_html=True)
+center_logo = st.columns([1, 2, 1])
+with center_logo[1]:
+    st.image("Logo Kelompok Foursight .jpg", width=200, caption="Created by : Foursight")
 
 # =============================
 # 🔍 FILTER SECTION
