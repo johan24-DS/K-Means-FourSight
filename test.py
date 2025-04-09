@@ -59,7 +59,7 @@ st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property b
 
 st.markdown("""
 <div style="text-align: center; margin-top: 20px;">
-    <img src="Logo Kelompok Foursight .jpg" width="200" />
+    <img src="Logo Kelompok Foursight.jpg" width="200" />
     <p style="color: grey; font-size: 12px;">Created by : Foursight</p>
 </div>
 """, unsafe_allow_html=True)
