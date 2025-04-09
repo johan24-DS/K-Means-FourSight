@@ -57,12 +57,12 @@ st.markdown("""
 st.markdown("<h1 style='text-align: center;'>🏡 Airbnb Recommendation System</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property based on your preferences!</h4>", unsafe_allow_html=True)
 
-st.markdown("""
-<div style="text-align: center; margin-top: 20px;">
-    <img src="Logo Kelompok Foursight.jpg" width="200" />
-    <p style="color: grey; font-size: 12px;">Created by : Foursight</p>
-</div>
-""", unsafe_allow_html=True)
+# 🖼️ Logo di tengah
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("Logo_Kelompok_Foursight.jpg", width=200)
+    st.markdown("<p style='text-align: center; color: grey; font-size: 12px;'>Created by : Foursight</p>", unsafe_allow_html=True)
+
 
 
 # =============================
