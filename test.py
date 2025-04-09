@@ -134,31 +134,3 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
             st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
-
-
-# Scatter Plot
-st.subheader("📊 Price vs. Review Scores Rating (Clustered)")
-fig, ax = plt.subplots(figsize=(10, 6))
-sns.scatterplot(
-    data=df,
-    x="price",
-    y="review_scores_rating",
-    hue="cluster_name",
-    palette="Set2",
-    ax=ax
-)
-ax.set_xlabel("Price")
-ax.set_ylabel("Review Scores Rating")
-st.pyplot(fig)
-
-# Pie Chart
-st.subheader("🏠 Room Type Distribution in Selected Cluster")
-fig, ax = plt.subplots()
-filtered_df["room_type"].value_counts().plot.pie(
-    autopct="%1.1f%%",
-    startangle=140,
-    cmap="Set2",
-    ax=ax
-)
-ax.set_ylabel("")  # remove default ylabel
-st.pyplot(fig)
