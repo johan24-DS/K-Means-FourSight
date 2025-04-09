@@ -66,14 +66,13 @@ cols = st.columns(3)
 for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
         with st.container():
-            st.image(row["picture_url"], use_column_width=True)
+            st.image(row["picture_url"], use_container_width=True)
             st.markdown(f"#### [{row['name']}]({row['listing_url']})", unsafe_allow_html=True)
             st.markdown(f"📍 **{row['street']}, {row['city']}**", unsafe_allow_html=True)
             st.markdown(f"💰 **Price:** ${row['price']:.2f}")
             st.markdown(f"🛏️ **Bedrooms:** {row['bedrooms']} | 🛁 **Bathrooms:** {row['bathrooms']}")
             st.markdown(f"⭐ **Rating:** {row['review_scores_rating']}/100")
             st.markdown(f"🏷️ **Room Type:** {row['room_type']}")
-
 
 # Scatter Plot
 st.subheader("📊 Price vs. Review Scores Rating (Clustered)")
