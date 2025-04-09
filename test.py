@@ -86,6 +86,33 @@ filtered_df = df[
     (df["bedrooms"] >= num_bedrooms) &
     (df["bathrooms"] >= num_bathrooms)
 ]
+# Dropdown untuk sorting
+sort_col1, sort_col2 = st.columns(2)
+
+with sort_col1:
+    sort_price = st.selectbox("Sort by Price", ["⬆️ Highest", "⬇️ Lowest"])
+
+with sort_col2:
+    sort_rating = st.selectbox("Sort by Review Score", ["⬆️ Highest", "⬇️ Lowest"])
+
+# Terapkan sorting
+sort_by = []
+if sort_price == "⬆️ Highest":
+    sort_by.append(("price", False))
+elif sort_price == "⬇️ Lowest":
+    sort_by.append(("price", True))
+
+if sort_rating == "⬆️ Highest":
+    sort_by.append(("review_scores_rating", False))
+elif sort_rating == "⬇️ Lowest":
+    sort_by.append(("review_scores_rating", True))
+
+# Ekstrak kolom dan arah sort, lalu terapkan
+sort_cols = [x[0] for x in sort_by]
+sort_asc = [x[1] for x in sort_by]
+
+filtered_df = filtered_df.sort_values(by=sort_cols, ascending=sort_asc).head(10)
+
 
 # Tampilkan listing properti dalam grid
 st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
