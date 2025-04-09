@@ -63,7 +63,7 @@ for _, row in filtered_df.iterrows():
     with st.container():
         cols = st.columns([1, 3])
         with cols[0]:
-            st.image(row["picture_url"], width=300)
+            st.image(row["picture_url"], width=250)
         with cols[1]:
             st.markdown(f"### [{row['name']}]({row['listing_url']})")
             st.write(f"📍 {row['street']}, {row['city']}")
