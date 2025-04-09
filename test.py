@@ -8,6 +8,36 @@ df = pd.read_excel("Hasil Clustering KMeans.xlsx")
 
 # Streamlit UI
 st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
+
+# Custom CSS for card style
+st.markdown("""
+    <style>
+        .property-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            transition: 0.3s;
+            height: 100%;
+        }
+        .property-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+        .property-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+        .property-text {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 st.title("🏡 Airbnb Recommendation System")
 st.subheader("Find your perfect Airbnb property based on your preferences!")
 
@@ -60,19 +90,24 @@ filtered_df = df[
 # Tampilkan listing properti dalam grid
 st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 
-# Layout grid (3 properti per baris)
 cols = st.columns(3)
 
 for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
         with st.container():
+            st.markdown('<div class="property-card">', unsafe_allow_html=True)
             st.image(row["picture_url"], use_container_width=True)
-            st.markdown(f"#### [{row['name']}]({row['listing_url']})", unsafe_allow_html=True)
-            st.markdown(f"📍 **{row['street']}, {row['city']}**", unsafe_allow_html=True)
-            st.markdown(f"💰 **Price:** ${row['price']:.2f}")
-            st.markdown(f"🛏️ **Bedrooms:** {row['bedrooms']} | 🛁 **Bathrooms:** {row['bathrooms']}")
-            st.markdown(f"⭐ **Rating:** {row['review_scores_rating']}/100")
-            st.markdown(f"🏷️ **Room Type:** {row['room_type']}")
+            st.markdown(
+                f'<div class="property-title"><a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>', 
+                unsafe_allow_html=True
+            )
+            st.markdown(f'<div class="property-text">📍 <b>{row["street"]}, {row["city"]}</b></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="property-text">💰 Price: ${row["price"]:.2f}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="property-text">🛏️ Bedrooms: {row["bedrooms"]} | 🛁 Bathrooms: {row["bathrooms"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
 
 # Scatter Plot
 st.subheader("📊 Price vs. Review Scores Rating (Clustered)")
