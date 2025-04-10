@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,14 +25,35 @@ df["cluster_name"] = df["cluster"].map(cluster_names)
 st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
 
 # Custom CSS untuk styling kartu properti
+# Tambahkan ini ke bagian CSS kamu
+# Tambahkan CSS untuk konsistensi ukuran gambar dan kontainer
 st.markdown("""
     <style>
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+        .grid-item {
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .grid-item {
+                flex: 1 1 calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .grid-item {
+                flex: 1 1 100%;
+            }
+        }
         .property-card {
             background-color: #f9f9f9;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
             transition: 0.3s;
             height: 100%;
         }
@@ -55,7 +77,7 @@ st.markdown("""
 # 🔷 HEADER
 # =============================
 st.markdown("<h1 style='text-align: center;'>🏡 Airbnb Recommendation System</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property based on your preferences!</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property with FourSight!</h4>", unsafe_allow_html=True) 
 
 # 🖼️ Logo benar-benar di tengah dengan HTML
 st.markdown(
@@ -71,10 +93,7 @@ st.markdown(
 # =============================
 # 🔍 FILTER SECTION
 # =============================
-st.subheader("🔎 Filter Your Search")
-
-if st.checkbox("Show raw data"):
-    st.write(df.head())
+st.subheader("🔎 Find your perfect Airbnb property") 
 
 # Kolom untuk filter cluster, kota dan jalan
 col_top1, col_top2, col_top3 = st.columns(3)
@@ -145,20 +164,31 @@ filtered_df = filtered_df.head(10)
 # =============================
 st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 
+# URL fallback untuk gambar placeholder
+placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
+
+# Buat 3 kolom tetap
 cols = st.columns(3)
 
+# Loop hasil properti
 for i, (_, row) in enumerate(filtered_df.iterrows()):
-    with cols[i % 3]:
-        with st.container():
-            st.markdown('<div class="property-card">', unsafe_allow_html=True)
-            st.image(row["picture_url"], use_container_width=True)
-            st.markdown(
-                f'<div class="property-title"><a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
-                unsafe_allow_html=True
-            )
-            st.markdown(f'<div class="property-text">📍 <b>{row["street"]}, {row["city"]}</b></div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">💰 Price: ${row["price"]:.2f}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">🛏️ Bedrooms: {row["bedrooms"]} | 🛁 Bathrooms: {row["bathrooms"]}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+    with cols[i % 3]:  # simpan ke kolom 0, 1, 2 lalu ulang
+        with st.container(border=True):
+            # Gambar
+            image_url = row["picture_url"]
+            if pd.isna(image_url) or image_url.strip() == "":
+                st.image(placeholder_image, use_container_width=True)
+            else:
+                try:
+                    st.image(image_url, use_container_width=True)
+                except:
+                    st.image(placeholder_image, use_container_width=True)
+
+            # Info Properti
+            st.markdown(f"**{i+1}. [{row['name']}]({row['listing_url']})**")
+            st.write(f"📍 {row['street']}, {row['city']}")
+            st.write(f"💰 Price: ${row['price']:.2f}")
+            st.write(f"🛏️ Bedrooms: {row['bedrooms']} | 🛁 Bathrooms: {row['bathrooms']}")
+            st.write(f"⭐ Rating: {row['review_scores_rating']}/100")
+            st.write(f"🏷️ Room Type: {row['room_type']}")
+
