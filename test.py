@@ -26,51 +26,29 @@ st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
 
 # Custom CSS untuk styling kartu properti
 # Tambahkan ini ke bagian CSS kamu
+# Tambahkan CSS untuk konsistensi ukuran gambar dan kontainer
 st.markdown("""
     <style>
-        .grid-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: flex-start;
-        }
-        .grid-item {
-            flex: 1 1 calc(33.333% - 20px);
-            box-sizing: border-box;
-        }
-        @media (max-width: 768px) {
-            .grid-item {
-                flex: 1 1 calc(50% - 20px);
-            }
-        }
-        @media (max-width: 480px) {
-            .grid-item {
-                flex: 1 1 100%;
-            }
-        }
-        .property-card {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            transition: 0.3s;
-            height: 100%;
-        }
-        .property-card:hover {
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-            transform: translateY(-4px);
-        }
-        .property-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px 0 5px;
-        }
-        .property-text {
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
+    .property-card {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 16px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .property-image img {
+        object-fit: cover;
+        width: 100%;
+        height: 200px;
+        border-radius: 8px;
+    }
     </style>
 """, unsafe_allow_html=True)
+
 
 
 # =============================
@@ -165,34 +143,28 @@ filtered_df = filtered_df.head(10)
 st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 
 cols = st.columns(3)
-
-# Pastikan path placeholder sesuai dengan lokasi file Streamlit
-# Gunakan link raw dari GitHub
-# URL fallback untuk gambar placeholder
 placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
 
-# Buat 3 kolom tetap
-cols = st.columns(3)
-
-# Loop hasil properti
 for i, (_, row) in enumerate(filtered_df.iterrows()):
-    with cols[i % 3]:  # simpan ke kolom 0, 1, 2 lalu ulang
-        with st.container(border=True):
+    with cols[i % 3]:
+        with st.container():
+            st.markdown('<div class="property-card">', unsafe_allow_html=True)
+
             # Gambar
             image_url = row["picture_url"]
             if pd.isna(image_url) or image_url.strip() == "":
-                st.image(placeholder_image, use_container_width=True)
+                img = placeholder_image
             else:
-                try:
-                    st.image(image_url, use_container_width=True)
-                except:
-                    st.image(placeholder_image, use_container_width=True)
+                img = image_url
 
-            # Info Properti
+            # Tampilkan gambar dengan div agar CSS-nya aktif
+            st.markdown(f'<div class="property-image"><img src="{img}" alt="Property Image"></div>', unsafe_allow_html=True)
+
+            # Informasi properti
             st.markdown(f"**{i+1}. [{row['name']}]({row['listing_url']})**")
             st.write(f"📍 {row['street']}, {row['city']}")
             st.write(f"💰 Price: ${row['price']:.2f}")
             st.write(f"🛏️ Bedrooms: {row['bedrooms']} | 🛁 Bathrooms: {row['bathrooms']}")
             st.write(f"⭐ Rating: {row['review_scores_rating']}/100")
             st.write(f"🏷️ Room Type: {row['room_type']}")
-
+            st.markdown('</div>', unsafe_allow_html=True)
