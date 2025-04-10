@@ -142,29 +142,31 @@ filtered_df = filtered_df.head(10)
 # =============================
 st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 
-cols = st.columns(3)
+# URL fallback untuk gambar placeholder
 placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
 
-for i, (_, row) in enumerate(filtered_df.iterrows()):
-    with cols[i % 3]:
-        with st.container():
-            st.markdown('<div class="property-card">', unsafe_allow_html=True)
+# Buat 3 kolom tetap
+cols = st.columns(3)
 
+# Loop hasil properti
+for i, (_, row) in enumerate(filtered_df.iterrows()):
+    with cols[i % 3]:  # simpan ke kolom 0, 1, 2 lalu ulang
+        with st.container(border=True):
             # Gambar
             image_url = row["picture_url"]
             if pd.isna(image_url) or image_url.strip() == "":
-                img = placeholder_image
+                st.image(placeholder_image, use_container_width=True)
             else:
-                img = image_url
+                try:
+                    st.image(image_url, use_container_width=True)
+                except:
+                    st.image(placeholder_image, use_container_width=True)
 
-            # Tampilkan gambar dengan div agar CSS-nya aktif
-            st.markdown(f'<div class="property-image"><img src="{img}" alt="Property Image"></div>', unsafe_allow_html=True)
-
-            # Informasi properti
+            # Info Properti
             st.markdown(f"**{i+1}. [{row['name']}]({row['listing_url']})**")
             st.write(f"📍 {row['street']}, {row['city']}")
             st.write(f"💰 Price: ${row['price']:.2f}")
             st.write(f"🛏️ Bedrooms: {row['bedrooms']} | 🛁 Bathrooms: {row['bathrooms']}")
             st.write(f"⭐ Rating: {row['review_scores_rating']}/100")
             st.write(f"🏷️ Room Type: {row['room_type']}")
-            st.markdown('</div>', unsafe_allow_html=True)
+
