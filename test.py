@@ -151,7 +151,7 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
 
             # ✅ Gambar fallback jika kosong
             if pd.isna(row["picture_url"]) or row["picture_url"] == "":
-                st.image("https://via.placeholder.com/400x300?text=No+Image", use_container_width=True)
+                st.image("https://via.placeholder.com/400x300.png?text=No+Image", use_container_width=True)
             else:
                 st.image(row["picture_url"], use_container_width=True)
 
