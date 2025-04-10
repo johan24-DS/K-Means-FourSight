@@ -1,3 +1,56 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load data hasil clustering
+df = pd.read_excel("Hasil Clustering KMeans.xlsx")
+
+# Konversi kolom harga
+df["price"] = df["price"].astype(str).str.replace("[$,]", "", regex=True)
+df["price"] = pd.to_numeric(df["price"], errors='coerce')
+
+# Mapping angka cluster ke nama unik
+cluster_names = {
+    1: "🏠 Budget Single",
+    2: "🏡 Spacious Family Home",
+    3: "🌟 Luxury Group Stay",
+    4: "💼 Economy Shared Room",
+    5: "🛏️ Mid-Range Private Room"
+}
+df["cluster_name"] = df["cluster"].map(cluster_names)
+
+# Streamlit UI config
+st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
+
+# Custom CSS untuk styling kartu properti
+st.markdown("""
+    <style>
+        .property-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            transition: 0.3s;
+            height: 100%;
+        }
+        .property-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+        .property-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+        .property-text {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # =============================
 # 🔷 HEADER
 # =============================
