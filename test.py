@@ -146,24 +146,23 @@ st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 cols = st.columns(3)
 
 # Pastikan path placeholder sesuai dengan lokasi file Streamlit
-placeholder_image = "No-Image.jpg"  # Langsung nama file, karena ada di root yang sama
+placeholder_image = "no-image.jpg"
 
 for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
         with st.container():
             st.markdown('<div class="property-card">', unsafe_allow_html=True)
-            
-            # Logika fallback gambar
+
             image_url = row["picture_url"]
             try:
                 if pd.isna(image_url) or image_url.strip() == "":
-                    raise ValueError("Empty or NaN image URL")
+                    raise ValueError("Invalid image URL")
                 st.image(image_url, use_container_width=True)
-            except Exception as e:
+            except:
                 st.image(placeholder_image, use_container_width=True)
-                st.caption("⚠️ Gagal memuat gambar, tampilkan gambar default.")
+                st.caption("⚠️ Gambar tidak tersedia. Menampilkan gambar default.")
 
-            # Konten property lainnya
+            # Property details
             st.markdown(
                 f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
                 unsafe_allow_html=True
