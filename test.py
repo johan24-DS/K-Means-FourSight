@@ -144,18 +144,24 @@ st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 
 cols = st.columns(3)
 
+placeholder_image = "No-Image.jpg"  # Gambar placeholder milikmu
+
 for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
         with st.container():
             st.markdown('<div class="property-card">', unsafe_allow_html=True)
-
-            # ✅ Gambar fallback jika kosong
-            if pd.isna(row["picture_url"]) or row["picture_url"] == "":
-                st.image("https://via.placeholder.com/400x300.png?text=No+Image", use_container_width=True)
+            
+            # Logika fallback gambar
+            image_url = row["picture_url"]
+            if pd.isna(image_url) or image_url.strip() == "":
+                st.image(placeholder_image, use_container_width=True)
             else:
-                st.image(row["picture_url"], use_container_width=True)
+                try:
+                    st.image(image_url, use_container_width=True)
+                except:
+                    st.image(placeholder_image, use_container_width=True)
 
-            # ✅ Tambahkan nomor urut
+            # Konten property lainnya
             st.markdown(
                 f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
                 unsafe_allow_html=True
@@ -166,3 +172,4 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
             st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
+
