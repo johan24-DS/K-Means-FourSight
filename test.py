@@ -28,17 +28,33 @@ st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
 # Tambahkan ini ke bagian CSS kamu
 st.markdown("""
     <style>
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+        .grid-item {
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .grid-item {
+                flex: 1 1 calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .grid-item {
+                flex: 1 1 100%;
+            }
+        }
         .property-card {
             background-color: #f9f9f9;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
             transition: 0.3s;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
         .property-card:hover {
             box-shadow: 0 6px 16px rgba(0,0,0,0.15);
@@ -52,12 +68,6 @@ st.markdown("""
         .property-text {
             font-size: 14px;
             margin-bottom: 6px;
-        }
-        .card-inner {
-            min-height: 530px; /* Atur tinggi minimal agar semua kartu seragam */
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -160,31 +170,38 @@ cols = st.columns(3)
 # Gunakan link raw dari GitHub
 placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
 
+# Mulai grid wrapper
+st.markdown('<div class="grid-container">', unsafe_allow_html=True)
+
 for i, (_, row) in enumerate(filtered_df.iterrows()):
-    with cols[i % 3]:
-        with st.container():
-            st.markdown('<div class="property-card"><div class="card-inner">', unsafe_allow_html=True)
+    st.markdown('<div class="grid-item">', unsafe_allow_html=True)
 
-            image_url = row["picture_url"]
-            # Logika fallback image
-            if pd.isna(image_url) or image_url.strip() == "":
+    # Isi konten tiap item (seperti sebelumnya)
+    with st.container():
+        st.markdown('<div class="property-card">', unsafe_allow_html=True)
+
+        image_url = row["picture_url"]
+        if pd.isna(image_url) or image_url.strip() == "":
+            st.image(placeholder_image, use_container_width=True)
+        else:
+            try:
+                st.image(image_url, use_container_width=True)
+            except:
                 st.image(placeholder_image, use_container_width=True)
-            else:
-                try:
-                    st.image(image_url, use_container_width=True)
-                except:
-                    st.image(placeholder_image, use_container_width=True)
 
-            # Konten property lainnya
-            st.markdown(
-                f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
-                unsafe_allow_html=True
-            )
-            st.markdown(f'<div class="property-text">📍 <b>{row["street"]}, {row["city"]}</b></div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">💰 Price: ${row["price"]:.2f}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">🛏️ Bedrooms: {row["bedrooms"]} | 🛁 Bathrooms: {row["bathrooms"]}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
+            unsafe_allow_html=True
+        )
+        st.markdown(f'<div class="property-text">📍 <b>{row["street"]}, {row["city"]}</b></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="property-text">💰 Price: ${row["price"]:.2f}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="property-text">🛏️ Bedrooms: {row["bedrooms"]} | 🛁 Bathrooms: {row["bathrooms"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
 
-            st.markdown('</div></div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)  # close .property-card
 
+    st.markdown('</div>', unsafe_allow_html=True)  # close .grid-item
+
+# Tutup grid wrapper
+st.markdown('</div>', unsafe_allow_html=True)
