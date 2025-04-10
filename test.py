@@ -25,6 +25,7 @@ df["cluster_name"] = df["cluster"].map(cluster_names)
 st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
 
 # Custom CSS untuk styling kartu properti
+# Tambahkan ini ke bagian CSS kamu
 st.markdown("""
     <style>
         .property-card {
@@ -35,6 +36,9 @@ st.markdown("""
             margin-bottom: 20px;
             transition: 0.3s;
             height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .property-card:hover {
             box-shadow: 0 6px 16px rgba(0,0,0,0.15);
@@ -49,8 +53,15 @@ st.markdown("""
             font-size: 14px;
             margin-bottom: 6px;
         }
+        .card-inner {
+            min-height: 530px; /* Atur tinggi minimal agar semua kartu seragam */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
     </style>
 """, unsafe_allow_html=True)
+
 
 # =============================
 # 🔷 HEADER
@@ -152,10 +163,10 @@ placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no
 for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
         with st.container():
-            st.markdown('<div class="property-card">', unsafe_allow_html=True)
+            st.markdown('<div class="property-card"><div class="card-inner">', unsafe_allow_html=True)
 
             image_url = row["picture_url"]
-            # Fallback image pakai link GitHub
+            # Logika fallback image
             if pd.isna(image_url) or image_url.strip() == "":
                 st.image(placeholder_image, use_container_width=True)
             else:
@@ -163,7 +174,6 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
                     st.image(image_url, use_container_width=True)
                 except:
                     st.image(placeholder_image, use_container_width=True)
-                    st.caption("⚠️ Gambar tidak tersedia. Menampilkan default.")
 
             # Konten property lainnya
             st.markdown(
@@ -175,4 +185,6 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
             st.markdown(f'<div class="property-text">🛏️ Bedrooms: {row["bedrooms"]} | 🛁 Bathrooms: {row["bathrooms"]}</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+
+            st.markdown('</div></div>', unsafe_allow_html=True)
+
