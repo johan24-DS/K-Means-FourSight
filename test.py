@@ -146,7 +146,8 @@ st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
 cols = st.columns(3)
 
 # Pastikan path placeholder sesuai dengan lokasi file Streamlit
-placeholder_image = "no-image.jpg"
+# Gunakan link raw dari GitHub
+placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
 
 for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
@@ -154,15 +155,17 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
             st.markdown('<div class="property-card">', unsafe_allow_html=True)
 
             image_url = row["picture_url"]
-            try:
-                if pd.isna(image_url) or image_url.strip() == "":
-                    raise ValueError("Invalid image URL")
-                st.image(image_url, use_container_width=True)
-            except:
+            # Fallback image pakai link GitHub
+            if pd.isna(image_url) or image_url.strip() == "":
                 st.image(placeholder_image, use_container_width=True)
-                st.caption("⚠️ Gambar tidak tersedia. Menampilkan gambar default.")
+            else:
+                try:
+                    st.image(image_url, use_container_width=True)
+                except:
+                    st.image(placeholder_image, use_container_width=True)
+                    st.caption("⚠️ Gambar tidak tersedia. Menampilkan default.")
 
-            # Property details
+            # Konten property lainnya
             st.markdown(
                 f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
                 unsafe_allow_html=True
