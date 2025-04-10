@@ -1,61 +1,8 @@
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Load data hasil clustering
-df = pd.read_excel("Hasil Clustering KMeans.xlsx")
-
-# Konversi kolom harga
-df["price"] = df["price"].astype(str).str.replace("[$,]", "", regex=True)
-df["price"] = pd.to_numeric(df["price"], errors='coerce')
-
-# Mapping angka cluster ke nama unik
-cluster_names = {
-    1: "🏠 Budget Single",
-    2: "🏡 Spacious Family Home",
-    3: "🌟 Luxury Group Stay",
-    4: "💼 Economy Shared Room",
-    5: "🛏️ Mid-Range Private Room"
-}
-df["cluster_name"] = df["cluster"].map(cluster_names)
-
-# Streamlit UI config
-st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
-
-# Custom CSS untuk styling kartu properti
-st.markdown("""
-    <style>
-        .property-card {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-            transition: 0.3s;
-            height: 100%;
-        }
-        .property-card:hover {
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-            transform: translateY(-4px);
-        }
-        .property-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px 0 5px;
-        }
-        .property-text {
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
 # =============================
 # 🔷 HEADER
 # =============================
 st.markdown("<h1 style='text-align: center;'>🏡 Airbnb Recommendation System</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property based on your preferences!</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property with FourSight!</h4>", unsafe_allow_html=True) 
 
 # 🖼️ Logo benar-benar di tengah dengan HTML
 st.markdown(
@@ -71,10 +18,7 @@ st.markdown(
 # =============================
 # 🔍 FILTER SECTION
 # =============================
-st.subheader("🔎 Filter Your Search")
-
-if st.checkbox("Show raw data"):
-    st.write(df.head())
+st.subheader("🔎 Find your perfect Airbnb property") 
 
 # Kolom untuk filter cluster, kota dan jalan
 col_top1, col_top2, col_top3 = st.columns(3)
@@ -151,9 +95,16 @@ for i, (_, row) in enumerate(filtered_df.iterrows()):
     with cols[i % 3]:
         with st.container():
             st.markdown('<div class="property-card">', unsafe_allow_html=True)
-            st.image(row["picture_url"], use_container_width=True)
+
+            # ✅ Gambar fallback jika kosong
+            if pd.isna(row["picture_url"]) or row["picture_url"] == "":
+                st.image("https://via.placeholder.com/400x300?text=No+Image", use_container_width=True)
+            else:
+                st.image(row["picture_url"], use_container_width=True)
+
+            # ✅ Tambahkan nomor urut
             st.markdown(
-                f'<div class="property-title"><a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
+                f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
                 unsafe_allow_html=True
             )
             st.markdown(f'<div class="property-text">📍 <b>{row["street"]}, {row["city"]}</b></div>', unsafe_allow_html=True)
