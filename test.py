@@ -168,40 +168,31 @@ cols = st.columns(3)
 
 # Pastikan path placeholder sesuai dengan lokasi file Streamlit
 # Gunakan link raw dari GitHub
+# URL fallback untuk gambar placeholder
 placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
 
-# Mulai grid wrapper
-st.markdown('<div class="grid-container">', unsafe_allow_html=True)
+# Buat 3 kolom tetap
+cols = st.columns(3)
 
+# Loop hasil properti
 for i, (_, row) in enumerate(filtered_df.iterrows()):
-    st.markdown('<div class="grid-item">', unsafe_allow_html=True)
-
-    # Isi konten tiap item (seperti sebelumnya)
-    with st.container():
-        st.markdown('<div class="property-card">', unsafe_allow_html=True)
-
-        image_url = row["picture_url"]
-        if pd.isna(image_url) or image_url.strip() == "":
-            st.image(placeholder_image, use_container_width=True)
-        else:
-            try:
-                st.image(image_url, use_container_width=True)
-            except:
+    with cols[i % 3]:  # simpan ke kolom 0, 1, 2 lalu ulang
+        with st.container(border=True):
+            # Gambar
+            image_url = row["picture_url"]
+            if pd.isna(image_url) or image_url.strip() == "":
                 st.image(placeholder_image, use_container_width=True)
+            else:
+                try:
+                    st.image(image_url, use_container_width=True)
+                except:
+                    st.image(placeholder_image, use_container_width=True)
 
-        st.markdown(
-            f'<div class="property-title">{i+1}. <a href="{row["listing_url"]}" target="_blank">{row["name"]}</a></div>',
-            unsafe_allow_html=True
-        )
-        st.markdown(f'<div class="property-text">📍 <b>{row["street"]}, {row["city"]}</b></div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="property-text">💰 Price: ${row["price"]:.2f}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="property-text">🛏️ Bedrooms: {row["bedrooms"]} | 🛁 Bathrooms: {row["bathrooms"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="property-text">⭐ Rating: {row["review_scores_rating"]}/100</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="property-text">🏷️ Room Type: {row["room_type"]}</div>', unsafe_allow_html=True)
+            # Info Properti
+            st.markdown(f"**{i+1}. [{row['name']}]({row['listing_url']})**")
+            st.write(f"📍 {row['street']}, {row['city']}")
+            st.write(f"💰 Price: ${row['price']:.2f}")
+            st.write(f"🛏️ Bedrooms: {row['bedrooms']} | 🛁 Bathrooms: {row['bathrooms']}")
+            st.write(f"⭐ Rating: {row['review_scores_rating']}/100")
+            st.write(f"🏷️ Room Type: {row['room_type']}")
 
-        st.markdown('</div>', unsafe_allow_html=True)  # close .property-card
-
-    st.markdown('</div>', unsafe_allow_html=True)  # close .grid-item
-
-# Tutup grid wrapper
-st.markdown('</div>', unsafe_allow_html=True)
