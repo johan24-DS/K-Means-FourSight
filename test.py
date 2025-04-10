@@ -29,27 +29,49 @@ st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
 # Tambahkan CSS untuk konsistensi ukuran gambar dan kontainer
 st.markdown("""
     <style>
-    .property-card {
-        background-color: #fff;
-        padding: 10px;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        margin-bottom: 16px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .property-image img {
-        object-fit: cover;
-        width: 100%;
-        height: 200px;
-        border-radius: 8px;
-    }
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+        .grid-item {
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            .grid-item {
+                flex: 1 1 calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .grid-item {
+                flex: 1 1 100%;
+            }
+        }
+        .property-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            height: 100%;
+        }
+        .property-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+        .property-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+        .property-text {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
     </style>
 """, unsafe_allow_html=True)
-
-
 
 # =============================
 # 🔷 HEADER
