@@ -29,6 +29,9 @@ st.set_page_config(page_title="Airbnb Recommendation System", layout="wide")
 # ================================
 st.markdown("""
     <style>
+        body {
+            background-color: #f3f7f9;
+        }
         .grid-container {
             display: flex;
             flex-wrap: wrap;
@@ -50,7 +53,7 @@ st.markdown("""
             }
         }
         .property-card {
-            background-color: #f9f9f9;
+            background-color: #ffffff;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.08);
@@ -70,6 +73,17 @@ st.markdown("""
             font-size: 14px;
             margin-bottom: 6px;
         }
+        .stButton>button {
+            background-color: #00A3D9;
+            color: white;
+            border-radius: 5px;
+        }
+        .stButton>button:hover {
+            background-color: #0087b8;
+        }
+        .stTextInput>div>div>input {
+            border-color: #00A3D9;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -82,7 +96,6 @@ st.markdown("<h4 style='text-align: center;'>by FourSight Team</h4>", unsafe_all
 st.markdown("""
     <div style="text-align: center; margin-top: 30px;">
         <img src="https://github.com/johan24-DS/K-Means-FourSight/raw/main/logo_foursight.jpg" width="300" />
-#        <p style="color: grey; font-size: 12px;">Created by : Foursight</p>
     </div>
 """, unsafe_allow_html=True)
 
