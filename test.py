@@ -77,19 +77,19 @@ st.markdown("""
 # 🔷 HEADER
 # ================================
 st.markdown("<h1 style='text-align: center;'>🏡 Airbnb Recommendation System</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center;'>Find your perfect Airbnb property with FourSight!</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center;'>by FourSight Team</h4>", unsafe_allow_html=True)
 
 st.markdown("""
     <div style="text-align: center; margin-top: 30px;">
         <img src="https://github.com/johan24-DS/K-Means-FourSight/raw/main/logo_foursight.jpg" width="300" />
-        <p style="color: grey; font-size: 12px;">Created by : Foursight</p>
+#        <p style="color: grey; font-size: 12px;">Created by : Foursight</p>
     </div>
 """, unsafe_allow_html=True)
 
 # ================================
 # 🔍 FILTER SECTION
 # ================================
-st.subheader("🔎 Find your perfect Airbnb property")
+st.subheader("🔎 Find your perfect Airbnb property with FourSight")
 
 # Cluster filter terlebih dahulu
 col_top1, col_top2, col_top3 = st.columns(3)
@@ -181,9 +181,17 @@ filtered_df = filtered_df.head(10)
 # ================================
 if not filtered_df.empty:
     avg_filtered_price = filtered_df["price"].mean()
-    st.markdown(f"💡 **Average price of filtered properties:** `${avg_filtered_price:,.2f}`")
+    st.markdown(
+        f"""
+        <h3 style='color: #2E8B57;'>
+            💡 Average price of filtered properties: <span style='color: black;'>${avg_filtered_price:,.2f}</span>
+        </h3>
+        """,
+        unsafe_allow_html=True
+    )
 else:
     st.warning("No properties match the selected criteria.")
+
 
 # ================================
 # 🏠 TAMPILKAN PROPERTY
