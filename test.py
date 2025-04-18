@@ -148,4 +148,66 @@ filtered_df = filtered_cluster_df[
     (filtered_cluster_df["price"] <= price_range[1]) &
     (filtered_cluster_df["review_scores_rating"] >= rating_range[0]) &
     (filtered_cluster_df["review_scores_rating"] <= rating_range[1]) &
-    (
+    (filtered_cluster_df["bedrooms"] >= num_bedrooms) &
+    (filtered_cluster_df["bathrooms"] >= num_bathrooms)
+]
+
+if city_option != "All":
+    filtered_df = filtered_df[filtered_df["city"] == city_option]
+if street_option != "All":
+    filtered_df = filtered_df[filtered_df["street"] == street_option]
+
+# Sorting
+sort_by = []
+if sort_price == "⬆️ Highest":
+    sort_by.append(("price", False))
+elif sort_price == "⬇️ Lowest":
+    sort_by.append(("price", True))
+if sort_rating == "⬆️ Highest":
+    sort_by.append(("review_scores_rating", False))
+elif sort_rating == "⬇️ Lowest":
+    sort_by.append(("review_scores_rating", True))
+
+if sort_by:
+    sort_cols = [x[0] for x in sort_by]
+    sort_asc = [x[1] for x in sort_by]
+    filtered_df = filtered_df.sort_values(by=sort_cols, ascending=sort_asc)
+
+# Ambil 10 teratas
+filtered_df = filtered_df.head(10)
+
+# ================================
+# 💰 AVERAGE PRICE DISPLAY
+# ================================
+if not filtered_df.empty:
+    avg_filtered_price = filtered_df["price"].mean()
+    st.markdown(f"💡 **Average price of filtered properties:** `${avg_filtered_price:,.2f}`")
+else:
+    st.warning("No properties match the selected criteria.")
+
+# ================================
+# 🏠 TAMPILKAN PROPERTY
+# ================================
+st.subheader(f"🏘️ {len(filtered_df)} Properties Matching Your Criteria")
+
+placeholder_image = "https://github.com/johan24-DS/K-Means-FourSight/raw/main/no-image.jpg"
+cols = st.columns(3)
+
+for i, (_, row) in enumerate(filtered_df.iterrows()):
+    with cols[i % 3]:
+        with st.container(border=True):
+            image_url = row["picture_url"]
+            if pd.isna(image_url) or image_url.strip() == "":
+                st.image(placeholder_image, use_container_width=True)
+            else:
+                try:
+                    st.image(image_url, use_container_width=True)
+                except:
+                    st.image(placeholder_image, use_container_width=True)
+
+            st.markdown(f"**{i+1}. [{row['name']}]({row['listing_url']})**")
+            st.write(f"📍 {row['street']}, {row['city']}")
+            st.write(f"💰 Price: ${row['price']:.2f}")
+            st.write(f"🛏️ Bedrooms: {row['bedrooms']} | 🛁 Bathrooms: {row['bathrooms']}")
+            st.write(f"⭐ Rating: {row['review_scores_rating']}/100")
+            st.write(f"🏷️ Room Type: {row['room_type']}")
