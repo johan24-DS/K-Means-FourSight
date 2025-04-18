@@ -98,7 +98,15 @@ st.subheader("🔎 Find your perfect Airbnb property")
 # Kolom untuk filter cluster, kota dan jalan
 col_top1, col_top2, col_top3 = st.columns(3)
 with col_top1:
-    cluster_option = st.selectbox("Select Cluster", sorted(df["cluster_name"].unique()))
+    cluster_option = st.multiselect(
+    "Select Cluster(s)", 
+    options=sorted(df["cluster_name"].unique()),
+    default=sorted(df["cluster_name"].unique())  # default semua terpilih
+)
+if cluster_option:
+    avg_price = df[df["cluster_name"].isin(cluster_option)]["price"].mean()
+    st.markdown(f"💡 **Average price of selected cluster(s):** `${avg_price:,.2f}`")
+
 with col_top2:
     city_option = st.selectbox("Select City", ["All"] + sorted(df["city"].dropna().unique()))
 with col_top3:
@@ -127,7 +135,7 @@ with sort_col2:
 # 🧮 FILTERING DATA
 # =============================
 filtered_df = df[
-    (df["cluster_name"] == cluster_option) &
+    (df["cluster_name"].isin(cluster_option)) &
     (df["price"] >= price_range[0]) & (df["price"] <= price_range[1]) &
     (df["review_scores_rating"] >= rating_range[0]) & (df["review_scores_rating"] <= rating_range[1]) &
     (df["bedrooms"] >= num_bedrooms) &
