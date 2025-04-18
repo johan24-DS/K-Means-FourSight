@@ -98,16 +98,35 @@ st.subheader("🔎 Find your perfect Airbnb property")
 # Kolom untuk filter cluster, kota dan jalan
 col_top1, col_top2, col_top3 = st.columns(3)
 with col_top1:
-    cluster_option = st.multiselect(
-    "Select Cluster(s)", 
+    # Filter berdasarkan cluster terlebih dahulu
+cluster_option = st.multiselect(
+    "Select Cluster(s)",
     options=sorted(df["cluster_name"].unique()),
-    default=sorted(df["cluster_name"].unique())  # default semua terpilih
+    default=sorted(df["cluster_name"].unique())
 )
 
+# Data sementara hanya berdasarkan cluster
+filtered_cluster_df = df[df["cluster_name"].isin(cluster_option)]
+
+# Filter dropdown City & Street berdasarkan cluster yang dipilih
 with col_top2:
-    city_option = st.selectbox("Select City", ["All"] + sorted(df["city"].dropna().unique()))
+    city_option = st.selectbox(
+        "Select City",
+        ["All"] + sorted(filtered_cluster_df["city"].dropna().unique())
+    )
+
 with col_top3:
-    street_option = st.selectbox("Select Street", ["All"] + sorted(df["street"].dropna().unique()))
+    # Filter street berdasarkan city (jika dipilih)
+    if city_option != "All":
+        street_choices = filtered_cluster_df[filtered_cluster_df["city"] == city_option]["street"].dropna().unique()
+    else:
+        street_choices = filtered_cluster_df["street"].dropna().unique()
+        
+    street_option = st.selectbox(
+        "Select Street",
+        ["All"] + sorted(street_choices)
+    )
+
 
 # Kolom filter lanjutan
 col1, col2, col3, col4 = st.columns(4)
@@ -131,13 +150,15 @@ with sort_col2:
 # =============================
 # 🧮 FILTERING DATA
 # =============================
-filtered_df = df[
-    (df["cluster_name"].isin(cluster_option)) &
-    (df["price"] >= price_range[0]) & (df["price"] <= price_range[1]) &
-    (df["review_scores_rating"] >= rating_range[0]) & (df["review_scores_rating"] <= rating_range[1]) &
-    (df["bedrooms"] >= num_bedrooms) &
-    (df["bathrooms"] >= num_bathrooms)
+filtered_df = filtered_cluster_df[
+    (filtered_cluster_df["price"] >= price_range[0]) & 
+    (filtered_cluster_df["price"] <= price_range[1]) &
+    (filtered_cluster_df["review_scores_rating"] >= rating_range[0]) & 
+    (filtered_cluster_df["review_scores_rating"] <= rating_range[1]) &
+    (filtered_cluster_df["bedrooms"] >= num_bedrooms) &
+    (filtered_cluster_df["bathrooms"] >= num_bathrooms)
 ]
+
 
 if city_option != "All":
     filtered_df = filtered_df[filtered_df["city"] == city_option]
