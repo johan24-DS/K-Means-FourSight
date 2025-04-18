@@ -103,9 +103,6 @@ with col_top1:
     options=sorted(df["cluster_name"].unique()),
     default=sorted(df["cluster_name"].unique())  # default semua terpilih
 )
-if cluster_option:
-    avg_price = df[df["cluster_name"].isin(cluster_option)]["price"].mean()
-    st.markdown(f"💡 **Average price of selected cluster(s):** `${avg_price:,.2f}`")
 
 with col_top2:
     city_option = st.selectbox("Select City", ["All"] + sorted(df["city"].dropna().unique()))
@@ -166,6 +163,16 @@ if sort_by:
     filtered_df = filtered_df.sort_values(by=sort_cols, ascending=sort_asc)
 
 filtered_df = filtered_df.head(10)
+
+# =============================
+# 💰 TAMPILKAN RATA-RATA HARGA
+# =============================
+if not filtered_df.empty:
+    avg_filtered_price = filtered_df["price"].mean()
+    st.markdown(f"💡 **Average price of filtered properties:** `${avg_filtered_price:,.2f}`")
+else:
+    st.warning("No properties match the selected criteria.")
+
 
 # =============================
 # 🏠 TAMPILKAN PROPERTY
